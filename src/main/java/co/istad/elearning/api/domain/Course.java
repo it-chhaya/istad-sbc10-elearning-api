@@ -10,9 +10,13 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class Course {
+
     private Integer id;
     private String title;
     private String description;
     private BigDecimal price;
     private Boolean status;
+
+    private Instructor instructor;
+
 }

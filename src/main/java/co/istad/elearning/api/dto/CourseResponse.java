@@ -9,6 +9,7 @@ public record CourseResponse(
         Integer id,
         String title,
         String description,
-        BigDecimal price
+        BigDecimal price,
+        InstructorResponse instructor
 ) {
 }

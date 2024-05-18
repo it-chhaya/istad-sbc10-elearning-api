@@ -4,6 +4,7 @@ import co.istad.elearning.api.domain.Course;
 import co.istad.elearning.api.dto.CourseCreateRequest;
 import co.istad.elearning.api.dto.CourseResponse;
 import co.istad.elearning.api.dto.CourseUpdateRequest;
+import co.istad.elearning.api.dto.InstructorResponse;
 import co.istad.elearning.api.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -91,6 +92,12 @@ public class CourseServiceImpl implements CourseService {
                         .title(course.getTitle())
                         .description(course.getDescription())
                         .price(course.getPrice())
+                        .instructor(InstructorResponse.builder()
+                                .id(course.getInstructor().getId())
+                                .name(course.getInstructor().getName())
+                                .gender(course.getInstructor().getGender())
+                                .biography(course.getInstructor().getBiography())
+                                .build())
                         .build())
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -107,6 +114,12 @@ public class CourseServiceImpl implements CourseService {
                         .title(course.getTitle())
                         .description(course.getDescription())
                         .price(course.getPrice())
+                        .instructor(InstructorResponse.builder()
+                                .id(course.getInstructor().getId())
+                                .name(course.getInstructor().getName())
+                                .gender(course.getInstructor().getGender())
+                                .biography(course.getInstructor().getBiography())
+                                .build())
                         .build())
                 .toList();
     }
