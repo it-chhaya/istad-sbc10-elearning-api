@@ -3,6 +3,7 @@ package co.istad.elearning.api.domain;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -17,6 +18,10 @@ public class Course {
     private BigDecimal price;
     private Boolean status;
 
+    // Course is taught by an instructor
     private Instructor instructor;
+
+    // Course has many categories
+    private List<Category> categories;
 
 }
