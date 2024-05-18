@@ -2,6 +2,7 @@ package co.istad.elearning.api.controller;
 
 import co.istad.elearning.api.dto.CourseCreateRequest;
 import co.istad.elearning.api.dto.CourseResponse;
+import co.istad.elearning.api.dto.CourseUpdateRequest;
 import co.istad.elearning.api.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,12 @@ import java.util.List;
 public class CourseController {
 
     private final CourseService courseService;
+
+    @PutMapping("/{id}")
+    CourseResponse updateCourse(@PathVariable Integer id,
+                                @RequestBody CourseUpdateRequest courseUpdateRequest) {
+        return courseService.updateCourse(id, courseUpdateRequest);
+    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping

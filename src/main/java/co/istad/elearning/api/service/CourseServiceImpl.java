@@ -3,6 +3,7 @@ package co.istad.elearning.api.service;
 import co.istad.elearning.api.domain.Course;
 import co.istad.elearning.api.dto.CourseCreateRequest;
 import co.istad.elearning.api.dto.CourseResponse;
+import co.istad.elearning.api.dto.CourseUpdateRequest;
 import co.istad.elearning.api.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,31 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
+
+
+    @Override
+    public CourseResponse updateCourse(Integer id, CourseUpdateRequest courseUpdateRequest) {
+
+        // validate course ID
+        Course updatedCourse = courseRepository
+                .getCourses()
+                .stream()
+                .filter(course -> course.getId().equals(id))
+                .peek(course -> { // Update course if exists
+                    course.setTitle(courseUpdateRequest.title());
+                    course.setDescription(courseUpdateRequest.description());
+                })
+                .findFirst() // Retrieve course
+                .orElseThrow(); // Throw exception if a course not found
+
+        // DTO Pattern
+        return CourseResponse.builder()
+                .id(updatedCourse.getId())
+                .title(updatedCourse.getTitle())
+                .description(updatedCourse.getDescription())
+                .price(updatedCourse.getPrice())
+                .build();
+    }
 
     @Override
     public CourseResponse createNewCourse(CourseCreateRequest courseCreateRequest) {
