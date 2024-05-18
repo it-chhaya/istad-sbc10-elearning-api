@@ -17,6 +17,12 @@ public class CourseController {
 
     private final CourseService courseService;
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    void deleteCourse(@PathVariable Integer id) {
+        courseService.deleteCourse(id);
+    }
+
     @PutMapping("/{id}")
     CourseResponse updateCourse(@PathVariable Integer id,
                                 @RequestBody CourseUpdateRequest courseUpdateRequest) {
@@ -27,6 +33,11 @@ public class CourseController {
     @PostMapping
     CourseResponse createNewCourse(@RequestBody CourseCreateRequest courseCreateRequest) {
         return courseService.createNewCourse(courseCreateRequest);
+    }
+
+    @GetMapping("/{id}")
+    CourseResponse findCourseById(@PathVariable Integer id) {
+        return courseService.findCourseById(id);
     }
 
     @GetMapping

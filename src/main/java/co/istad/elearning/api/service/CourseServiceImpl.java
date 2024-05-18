@@ -6,7 +6,9 @@ import co.istad.elearning.api.dto.CourseResponse;
 import co.istad.elearning.api.dto.CourseUpdateRequest;
 import co.istad.elearning.api.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -16,6 +18,16 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
 
+
+    @Override
+    public void deleteCourse(Integer id) {
+        List<Course> newCourses = courseRepository
+                .getCourses()
+                .stream()
+                .filter(course -> !course.getId().equals(id))
+                .toList();
+        courseRepository.setCourses(newCourses);
+    }
 
     @Override
     public CourseResponse updateCourse(Integer id, CourseUpdateRequest courseUpdateRequest) {
@@ -63,6 +75,23 @@ public class CourseServiceImpl implements CourseService {
                 .description(newCourse.getDescription())
                 .price(newCourse.getPrice())
                 .build();
+    }
+
+    @Override
+    public CourseResponse findCourseById(Integer id) {
+        return courseRepository
+                .getCourses()
+                .stream()
+                .filter(course -> course.getId().equals(id))
+                .map(course -> CourseResponse.builder()
+                        .id(course.getId())
+                        .title(course.getTitle())
+                        .description(course.getDescription())
+                        .price(course.getPrice())
+                        .build())
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Course with ID = %d has not found", id)));
     }
 
     @Override
