@@ -12,7 +12,7 @@ public class ApiException {
 
     @ExceptionHandler(ResponseStatusException.class)
     ResponseEntity<?> handleResponseStatusException(ResponseStatusException e) {
-        ErrorResponse<String> errorResponse = ErrorResponse.<String>builder()
+        ErrorResponse<?> errorResponse = ErrorResponse.builder()
                 .code(e.getStatusCode().value())
                 .reason(e.getReason())
                 .build();

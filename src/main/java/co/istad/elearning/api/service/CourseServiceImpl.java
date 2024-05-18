@@ -21,12 +21,14 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void deleteCourse(Integer id) {
-        List<Course> newCourses = courseRepository
+        Course deletedCourse = courseRepository
                 .getCourses()
                 .stream()
-                .filter(course -> !course.getId().equals(id))
-                .toList();
-        courseRepository.setCourses(newCourses);
+                .filter(course -> course.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Course with ID = %d has not found", id)));
+        courseRepository.getCourses().remove(deletedCourse);
     }
 
     @Override
@@ -42,7 +44,8 @@ public class CourseServiceImpl implements CourseService {
                     course.setDescription(courseUpdateRequest.description());
                 })
                 .findFirst() // Retrieve course
-                .orElseThrow(); // Throw exception if a course not found
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Course with ID = %d has not found", id))); // Throw exception if a course not found
 
         // DTO Pattern
         return CourseResponse.builder()
