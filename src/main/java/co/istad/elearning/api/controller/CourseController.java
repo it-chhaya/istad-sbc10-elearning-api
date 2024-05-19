@@ -26,7 +26,7 @@ public class CourseController {
 
     @PutMapping("/{id}")
     CourseResponse updateCourse(@PathVariable Integer id,
-                                @RequestBody CourseUpdateRequest courseUpdateRequest) {
+                                @Valid @RequestBody CourseUpdateRequest courseUpdateRequest) {
         return courseService.updateCourse(id, courseUpdateRequest);
     }
 

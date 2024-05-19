@@ -19,19 +19,19 @@ public class ApiException {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     Map<?, ?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 
-        List<FieldError> fieldErrors = new ArrayList<>();
+        List<FieldErrorResponse> fieldErrorResponses = new ArrayList<>();
+        e.getFieldErrors().forEach(fieldError -> fieldErrorResponses
+                .add(FieldErrorResponse.builder()
+                        .field(fieldError.getField())
+                        .detail(fieldError.getDefaultMessage())
+                        .build()));
 
-        e.getFieldErrors()
-                .forEach(fieldError -> fieldErrors
-                        .add(FieldError.builder()
-                                .field(fieldError.getField())
-                                .detail(fieldError.getDefaultMessage())
-                                .build()));
-
-        return Map.of("error", ErrorResponse.builder()
+        ErrorResponse<?> errorResponse = ErrorResponse.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .reason(fieldErrors)
-                .build());
+                .reason(fieldErrorResponses)
+                .build();
+
+        return Map.of("error", errorResponse);
     }
 
     @ExceptionHandler(ResponseStatusException.class)

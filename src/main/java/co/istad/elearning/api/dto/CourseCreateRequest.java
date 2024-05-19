@@ -13,8 +13,8 @@ public record CourseCreateRequest(
 
         String description,
 
-        @NotNull
-        @Positive
+        @NotNull(message = "Price is required")
+        @Positive(message = "Price must be positive")
         BigDecimal price
 ) {
 }
